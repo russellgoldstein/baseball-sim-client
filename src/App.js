@@ -1,24 +1,22 @@
+// App.js
 import React from 'react';
-import { useGetItemsQuery } from './services/myApi';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MyTable from './components/MyTable';
+import AuthSuccess from './components/AuthSuccess'; // Component to handle successful authentication
+import { ProtectedRoute } from './components/ProtectedRoute';
+import LoginPage from './components/LoginPage';
 
 function App() {
-  const { data, error, isLoading } = useGetItemsQuery();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  // Assuming `data` is the array of items you want to display
   return (
-    <MyTable
-      data={
-        data || [
-          { id: 1, name: 'First item' },
-          { id: 2, name: 'Second item' },
-          // Add more items as needed
-        ]
-      }
-    />
+    <Router>
+      <Routes>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/auth/success' element={<AuthSuccess />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='/' element={<MyTable />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
