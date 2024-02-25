@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './index.css';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useGetFangraphsHitterSeasonStatsQuery } from '../services/myApi';
+import { useFindUniqueMLBTeamsMutation, useGetFangraphsHitterSeasonStatsQuery } from '../services/myApi';
 
 const columnHelper = createColumnHelper();
 
@@ -25,7 +25,17 @@ const columns = [
 ];
 
 export default function MyTable() {
+  const [findUniqueMLBTeams, { data: teams, error: teamsError, isLoading: teamsLoading }] =
+    useFindUniqueMLBTeamsMutation();
+
+  // Assuming you don't need to send a body with your request, or if you do, replace {} with your actual request body
+  useEffect(() => {
+    findUniqueMLBTeams({});
+  }, [findUniqueMLBTeams]);
   const { data: fgData, error, isLoading } = useGetFangraphsHitterSeasonStatsQuery();
+
+  console.log('teams', teams, teamsError, teamsLoading);
+
   const data = React.useMemo(() => fgData?.data || [], [fgData]);
 
   const table = useReactTable({

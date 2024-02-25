@@ -11,6 +11,7 @@ export const myApi = createApi({
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
+      // This is where you could set headers common to all requests
       return headers;
     },
   }),
@@ -18,7 +19,19 @@ export const myApi = createApi({
     getFangraphsHitterSeasonStats: builder.query({
       query: () => `fangraphs-hitter-season-stats`,
     }),
+    // Adding a mutation to call a custom method
+    findUniqueMLBTeams: builder.mutation({
+      query: (body) => ({
+        url: `fangraphs-hitter-season-stats`, // Adjust the URL to your specific service
+        method: 'POST',
+        body,
+        headers: {
+          'X-Service-Method': 'findUniqueMLBTeams', // Custom header to specify the method
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetFangraphsHitterSeasonStatsQuery } = myApi;
+// Export hooks for your endpoints here
+export const { useGetFangraphsHitterSeasonStatsQuery, useFindUniqueMLBTeamsMutation } = myApi;
