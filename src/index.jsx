@@ -1,11 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux';
 import { store } from './store'; // Import the store you configured
+import ThemeProvider from './utils/ThemeContext';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const container = document.getElementById('root');
 const root = createRoot(container); // Create a root.
@@ -13,7 +14,11 @@ const root = createRoot(container); // Create a root.
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Router>
     </Provider>
   </React.StrictMode>
 );

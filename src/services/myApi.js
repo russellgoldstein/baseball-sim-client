@@ -30,8 +30,22 @@ export const myApi = createApi({
         },
       }),
     }),
+    findByMLBTeamAndSeason: builder.mutation({
+      query: (body) => ({
+        url: `fangraphs-hitter-season-stats`, // Adjust the URL to your specific service
+        method: 'POST',
+        body,
+        headers: {
+          'X-Service-Method': 'findByMLBTeamAndSeason', // Custom header to specify the method
+        },
+      }),
+    }),
   }),
 });
 
 // Export hooks for your endpoints here
-export const { useGetFangraphsHitterSeasonStatsQuery, useFindUniqueMLBTeamsMutation } = myApi;
+export const {
+  useGetFangraphsHitterSeasonStatsQuery,
+  useFindUniqueMLBTeamsMutation,
+  useFindByMLBTeamAndSeasonMutation,
+} = myApi;

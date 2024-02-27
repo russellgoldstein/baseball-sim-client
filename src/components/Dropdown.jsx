@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Transition from '../utils/Transition';
 
-export default function Dropdown({ options }) {
+export default function Dropdown({ options, selected, setSelected }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selected, setSelected] = useState(2);
 
+  const selectedOption = selected !== null ? options.find((option) => option.id === selected.id) : options[0];
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
@@ -40,7 +40,7 @@ export default function Dropdown({ options }) {
         aria-expanded={dropdownOpen}
       >
         <span className='flex items-center'>
-          <span>{options[selected].label}</span>
+          <span>{selectedOption.label}</span>
         </span>
         <svg className='shrink-0 ml-1 fill-current text-slate-400' width='11' height='7' viewBox='0 0 11 7'>
           <path d='M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z' />
@@ -69,15 +69,17 @@ export default function Dropdown({ options }) {
                 key={option.id}
                 tabIndex='0'
                 className={`flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 cursor-pointer ${
-                  option.id === selected && 'text-indigo-500'
+                  option.id === selectedOption.id && 'text-indigo-500'
                 }`}
                 onClick={() => {
-                  setSelected(option.id);
+                  setSelected(option);
                   setDropdownOpen(false);
                 }}
               >
                 <svg
-                  className={`shrink-0 mr-2 fill-current text-indigo-500 ${option.id !== selected && 'invisible'}`}
+                  className={`shrink-0 mr-2 fill-current text-indigo-500 ${
+                    option.id !== selectedOption.id && 'invisible'
+                  }`}
                   width='12'
                   height='9'
                   viewBox='0 0 12 9'

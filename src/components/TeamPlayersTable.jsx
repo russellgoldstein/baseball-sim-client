@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './index.css';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useGetFangraphsHitterSeasonStatsQuery } from '../services/myApi';
-import TeamSelector from './TeamSelector';
+import { useFindByMLBTeamAndSeasonMutation } from '../services/myApi';
 
 const columnHelper = createColumnHelper();
 
@@ -25,23 +24,36 @@ const columns = [
   // Add more columns as needed
 ];
 
-export default function MyTable() {
-  const { data: fgData, error, isLoading } = useGetFangraphsHitterSeasonStatsQuery();
+export default function TeamPlayersTable({ selectedTeam }) {
+  console.log('TeamPlayersTable', selectedTeam);
+  const [findByMLBTeamAndSeason, { data: teams, error: teamsError, isLoading: teamsLoading }] =
+    useFindByMLBTeamAndSeasonMutation();
 
-  const data = React.useMemo(() => fgData?.data || [], [fgData]);
-
+  console.log('TeamPlayersTable', selectedTeam, teams, teamsLoading, teamsError);
   const table = useReactTable({
-    data,
+    data: teams ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  // Ref to store the previous selected value
+  const prevSelectedRef = useRef();
 
+  useEffect(() => {
+    console.log('in useEffect', selectedTeam, prevSelectedRef.current?.id);
+    // Check if the current selected value is different from the previous
+    if (selectedTeam && selectedTeam.id !== prevSelectedRef.current?.id) {
+      findByMLBTeamAndSeason({ AbbName: selectedTeam.id, aseason: 2023 });
+    }
+    // Update the previous selected value for the next render
+    prevSelectedRef.current = selectedTeam;
+  }, [findByMLBTeamAndSeason, selectedTeam]);
+
+  if (teamsLoading) return <div>Loading...</div>;
+  if (teamsError) return <div>Error: {teamsError.message}</div>;
+  console.log({ teams, teamsLoading, teamsError });
   return (
     <div className='p-2'>
-      <TeamSelector />
       <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

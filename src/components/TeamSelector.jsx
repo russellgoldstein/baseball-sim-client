@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFindUniqueMLBTeamsMutation } from '../services/myApi';
-import Dropdown from './tailwind/components/Dropdown';
+import Dropdown from './Dropdown';
 
-export default function TeamSelector() {
+export default function TeamSelector({ selected, setSelected }) {
+  console.log('TeamSelector');
   const [findUniqueMLBTeams, { data: teams, error: teamsError, isLoading: teamsLoading }] =
     useFindUniqueMLBTeamsMutation();
 
@@ -10,20 +11,20 @@ export default function TeamSelector() {
     findUniqueMLBTeams({});
   }, [findUniqueMLBTeams]);
 
-  // Ensure `teams` is defined before mapping over it
-  const options = teams?.map((team) => ({ id: team.AbbName, label: team.AbbName })) || [];
+  if (teamsLoading || !teams) return <div>Loading...</div>;
+  if (teamsError) return <div>Error: {teamsError.message}</div>;
 
   return (
     <div>
       <h1>Team Selector</h1>
-      {teamsLoading && <div>Loading...</div>}
-      {teamsError && <div>Error: {teamsError.message}</div>}
-      {/* Render Dropdown only if there are teams */}
-      {teams?.length > 0 ? (
-        <Dropdown options={options} />
-      ) : (
-        !teamsLoading && <div>No teams found</div> // Provides feedback if no teams are found and not loading
+      {teams?.length > 0 && (
+        <Dropdown
+          options={teams?.map((team) => ({ id: team.AbbName, label: team.AbbName })) || []}
+          selected={selected}
+          setSelected={setSelected}
+        />
       )}
+      {!teamsLoading && teams?.length === 0 && <div>No teams found</div>}
     </div>
   );
 }
