@@ -30,13 +30,23 @@ export const myApi = createApi({
         },
       }),
     }),
-    findByMLBTeamAndSeason: builder.mutation({
+    findHittersByMLBTeamAndSeason: builder.mutation({
       query: (body) => ({
         url: `fangraphs-hitter-season-stats`, // Adjust the URL to your specific service
         method: 'POST',
         body,
         headers: {
-          'X-Service-Method': 'findByMLBTeamAndSeason', // Custom header to specify the method
+          'X-Service-Method': 'findHittersByMLBTeamAndSeason', // Custom header to specify the method
+        },
+      }),
+    }),
+    findPitchersByMLBTeamAndSeason: builder.mutation({
+      query: (body) => ({
+        url: `fangraphs-pitcher-season-stats`, // Adjust the URL to your specific service
+        method: 'POST',
+        body,
+        headers: {
+          'X-Service-Method': 'findPitchersByMLBTeamAndSeason', // Custom header to specify the method
         },
       }),
     }),
@@ -47,5 +57,6 @@ export const myApi = createApi({
 export const {
   useGetFangraphsHitterSeasonStatsQuery,
   useFindUniqueMLBTeamsMutation,
-  useFindByMLBTeamAndSeasonMutation,
+  useFindHittersByMLBTeamAndSeasonMutation,
+  useFindPitchersByMLBTeamAndSeasonMutation,
 } = myApi;

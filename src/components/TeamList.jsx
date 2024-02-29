@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import TeamSelector from './TeamSelector';
 
-import TeamPlayersTable from './TeamPlayersTable';
+import TeamHittersTable from './TeamHittersTable';
+import TeamPitchersTable from './TeamPitchersTable';
 
 export default function TeamList() {
   const [selected, setSelected] = useState(null);
@@ -9,7 +10,8 @@ export default function TeamList() {
   return (
     <>
       <TeamSelector selected={selected} setSelected={setSelected} />
-      <TeamPlayersTable selectedTeam={selected} />
+      {selected && <TeamHittersTable selectedTeam={selected} />}
+      {selected && <TeamPitchersTable selectedTeam={selected} />}
     </>
   );
 }

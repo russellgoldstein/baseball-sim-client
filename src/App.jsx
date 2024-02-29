@@ -6,7 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import LoginPage from './components/LoginPage';
 import './css/style.css';
 import './charts/ChartjsConfig';
-import TeamList from './components/TeamList';
+import MatchupSelector from './components/MatchupSelector';
 
 function App() {
   const location = useLocation();
@@ -21,7 +21,7 @@ function App() {
       <Route path='/login' element={<LoginPage />} />
       <Route path='/auth/success' element={<AuthSuccess />} />
       <Route element={<ProtectedRoute />}>
-        <Route path='/' element={<TeamList />} />
+        <Route path='/' element={<MatchupSelector />} />
       </Route>
     </Routes>
   );
