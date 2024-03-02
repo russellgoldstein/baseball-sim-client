@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFindUniqueMLBTeamsMutation } from '../services/myApi';
 import Dropdown from './Dropdown';
 
 export default function TeamSelector({ selected, setSelected }) {
-  console.log('TeamSelector');
+  console.log('TeamSelector', selected);
   const [findUniqueMLBTeams, { data: teams, error: teamsError, isLoading: teamsLoading }] =
     useFindUniqueMLBTeamsMutation();
 

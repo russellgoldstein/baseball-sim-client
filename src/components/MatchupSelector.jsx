@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TeamList from './TeamList';
 import Table from './Table';
 import {
@@ -24,6 +24,29 @@ export default function MatchupSelector() {
   const [homePitcherBoxScore, setHomePitcherBoxScore] = useState([]);
   const [awayHitterBoxScore, setAwayHitterBoxScore] = useState([]);
   const [awayPitcherBoxScore, setAwayPitcherBoxScore] = useState([]);
+  const [selectedHomeTeam, setSelectedHomeTeam] = useState(null);
+  const [selectedAwayTeam, setSelectedAwayTeam] = useState(null);
+
+  const [currentTab, setCurrentTab] = useState('away-team'); // Default to showing away team
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      // Check if the hash matches expected values, otherwise default to 'away-team'
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'away-team' || hash === 'home-team') {
+        setCurrentTab(hash);
+      }
+    };
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange, false);
+
+    // Call the handler in case the hash is already set on component mount
+    handleHashChange();
+
+    // Cleanup listener on component unmount
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const [playGame, { error: playGameError, isLoading: playGameLoading }] = usePlayGameMutation();
 
@@ -68,26 +91,54 @@ export default function MatchupSelector() {
 
       {playGameLoading && <div>Simulating Game...</div>}
       {playGameError && <div>Error Simulation: {playGameError.message}</div>}
-      <h1>Matchup Selector</h1>
-      <h2>Away Team</h2>
-      <Table data={awayTeamHitters} columns={hitterColumns} />
-      <Table data={awayTeamPitchers} columns={pitcherColumns} />
-      <TeamList
-        hittingLineup={awayTeamHitters}
-        setHittingLineup={setAwayTeamHitters}
-        pitchingLineup={awayTeamPitchers}
-        setPitchingLineup={setAwayTeamPitchers}
-      />
+      <div className='relative mb-6'>
+        <div className='absolute bottom-0 w-full h-px bg-slate-200 dark:bg-slate-700' aria-hidden='true'></div>
+        <ul className='relative text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar'>
+          <li className='mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8'>
+            <a className='block pb-3 text-indigo-500 whitespace-nowrap border-b-2 border-indigo-500' href='#away-team'>
+              Away Team
+            </a>
+          </li>
+          <li className='mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8'>
+            <a
+              className='block pb-3 text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 whitespace-nowrap'
+              href='#home-team'
+            >
+              Home Team
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      <h2>Home Team</h2>
-      <Table data={homeTeamHitters} columns={hitterColumns} />
-      <Table data={homeTeamPitchers} columns={pitcherColumns} />
-      <TeamList
-        hittingLineup={homeTeamHitters}
-        setHittingLineup={setHomeTeamHitters}
-        pitchingLineup={homeTeamPitchers}
-        setPitchingLineup={setHomeTeamPitchers}
-      />
+      {currentTab === 'away-team' && (
+        <>
+          <Table data={awayTeamHitters} columns={hitterColumns} />
+          <Table data={awayTeamPitchers} columns={pitcherColumns} />
+          <TeamList
+            hittingLineup={awayTeamHitters}
+            setHittingLineup={setAwayTeamHitters}
+            pitchingLineup={awayTeamPitchers}
+            setPitchingLineup={setAwayTeamPitchers}
+            selectedTeam={selectedAwayTeam}
+            setSelectedTeam={setSelectedAwayTeam}
+          />
+        </>
+      )}
+
+      {currentTab === 'home-team' && (
+        <>
+          <Table data={homeTeamHitters} columns={hitterColumns} />
+          <Table data={homeTeamPitchers} columns={pitcherColumns} />
+          <TeamList
+            hittingLineup={homeTeamHitters}
+            setHittingLineup={setHomeTeamHitters}
+            pitchingLineup={homeTeamPitchers}
+            setPitchingLineup={setHomeTeamPitchers}
+            selectedTeam={selectedHomeTeam}
+            setSelectedTeam={setSelectedHomeTeam}
+          />
+        </>
+      )}
     </div>
   );
 }

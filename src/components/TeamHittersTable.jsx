@@ -8,6 +8,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 const columns = getDefaultHitterColumns();
 
 export default function TeamHittersTable({ selectedTeam, lineup, setLineup }) {
+  console.log('TeamHittersTable', selectedTeam, lineup, setLineup);
   const addPlayerToLineup = (player) => {
     setLineup([...lineup, player]);
   };
