@@ -50,6 +50,16 @@ export const myApi = createApi({
         },
       }),
     }),
+    playGame: builder.mutation({
+      query: (body) => ({
+        url: `play-game`, // Adjust the URL to your specific service
+        method: 'POST',
+        body,
+        headers: {
+          'X-Service-Method': 'playGame', // Custom header to specify the method
+        },
+      }),
+    }),
   }),
 });
 
@@ -59,4 +69,5 @@ export const {
   useFindUniqueMLBTeamsMutation,
   useFindHittersByMLBTeamAndSeasonMutation,
   useFindPitchersByMLBTeamAndSeasonMutation,
+  usePlayGameMutation,
 } = myApi;
