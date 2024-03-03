@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { usePlayGameMutation } from '../services/myApi';
 import { GameBoxScore } from './GameBoxScore';
+import { Linescore } from './Linescore';
 
 export const SimMatchup = ({ awayTeamHitters, awayTeamPitchers, homeTeamHitters, homeTeamPitchers }) => {
   const [homeBoxScore, setHomeBoxScore] = useState([]);
   const [awayBoxScore, setAwayBoxScore] = useState([]);
+  const [homeLinescore, setHomeLinescore] = useState([]);
+  const [awayLinescore, setAwayLinescore] = useState([]);
 
   const [playGame, { error: playGameError, isLoading: playGameLoading }] = usePlayGameMutation();
 
@@ -16,7 +19,10 @@ export const SimMatchup = ({ awayTeamHitters, awayTeamPitchers, homeTeamHitters,
       homeTeamHitters,
       homeTeamPitchers,
     });
-    const { homeHitters, homePitcher, awayHitters, awayPitcher } = result.data;
+    const { homeHitters, homePitcher, awayHitters, awayPitcher } = result.data.boxscore;
+    const { home: homeLinescore, away: awayLinescore } = result.data.linescore;
+    setHomeLinescore(homeLinescore);
+    setAwayLinescore(awayLinescore);
     const homeBoxScore = processDataForBoscore(homeHitters, homePitcher, 'home');
     const awayBoxScore = processDataForBoscore(awayHitters, awayPitcher, 'away');
     console.log(homeBoxScore);
@@ -35,7 +41,12 @@ export const SimMatchup = ({ awayTeamHitters, awayTeamPitchers, homeTeamHitters,
         {homeBoxScore.hitters &&
           homeBoxScore.hitters.length > 0 &&
           awayBoxScore.pitchers &&
-          awayBoxScore.pitchers.length > 0 && <GameBoxScore homeBoxScore={homeBoxScore} awayBoxScore={awayBoxScore} />}
+          awayBoxScore.pitchers.length > 0 && (
+            <>
+              <Linescore homeLinescore={homeLinescore} awayLinescore={awayLinescore} />
+              <GameBoxScore homeBoxScore={homeBoxScore} awayBoxScore={awayBoxScore} />
+            </>
+          )}
       </div>
     </>
   );
