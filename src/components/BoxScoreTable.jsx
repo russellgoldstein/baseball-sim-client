@@ -1,59 +1,18 @@
 import React from 'react';
 import Table from './Table';
+import { getBoxScoreHitterColumns, getBoxScorePitcherColumns } from '../utils/consts';
 
-export default function BoxScoreTable({ data }) {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        accessor: 'player.name',
-      },
-      {
-        Header: 'Team',
-        accessor: 'team',
-      },
-      {
-        Header: 'PA',
-        accessor: 'plateAppearances',
-      },
-      {
-        Header: 'R',
-        accessor: 'runs',
-      },
-      {
-        Header: 'H',
-        accessor: 'hits',
-      },
-      {
-        Header: '1B',
-        accessor: 'singles',
-      },
-      {
-        Header: '2B',
-        accessor: 'doubles',
-      },
-      {
-        Header: '3B',
-        accessor: 'triples',
-      },
-      {
-        Header: 'HR',
-        accessor: 'homeruns',
-      },
-      {
-        Header: 'RBI',
-        accessor: 'rbi',
-      },
-      {
-        Header: 'BB',
-        accessor: 'walks',
-      },
-      {
-        Header: 'SO',
-        accessor: 'strikeouts',
-      },
-    ],
-    []
+const hitterBoxScoreColumns = getBoxScoreHitterColumns();
+const pitcherBoxScoreColumns = getBoxScorePitcherColumns();
+export default function BoxScoreTable({ hitterBoxScore, pitcherBoxScore }) {
+  return (
+    <div className='flex flex-row md:flex-col gap-4'>
+      <div className='table-container w-full'>
+        <Table columns={hitterBoxScoreColumns} data={hitterBoxScore} />
+      </div>
+      <div className='table-container w-full'>
+        <Table columns={pitcherBoxScoreColumns} data={pitcherBoxScore} />
+      </div>
+    </div>
   );
-  return <Table columns={columns} data={data} />;
 }

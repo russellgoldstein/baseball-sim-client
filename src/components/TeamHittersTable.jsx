@@ -7,17 +7,20 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 const columns = getDefaultHitterColumns();
 
-export default function TeamHittersTable({ selectedTeam, lineup, setLineup }) {
-  console.log('TeamHittersTable', selectedTeam, lineup, setLineup);
+export default function TeamHittersTable({ selectedTeam, lineup, setLineup, availableHitters, setAvailableHitters }) {
+  console.log('in TeamHittersTable', selectedTeam, lineup, availableHitters, setAvailableHitters);
   const addPlayerToLineup = (player) => {
-    setLineup([...lineup, player]);
+    console.log('in addPlayerToLineup', player);
+    setLineup((currentLineup) => [...currentLineup, player]); // Use functional update
+    setAvailableHitters((currentHitters) => currentHitters.filter((hitter) => hitter.id !== player.id));
   };
 
   const columnHelper = createColumnHelper();
 
   const addPlayerButton = columnHelper.accessor('addPlayer', {
-    header: 'Add Player',
+    header: 'Actions',
     cell: ({ row }) => <button onClick={() => addPlayerToLineup(row.original)}>Add Player</button>,
+    sticky: 'right',
   });
 
   const [findHittersByMLBTeamAndSeason, { data: teams, error: teamsError, isLoading: teamsLoading }] =
@@ -27,11 +30,18 @@ export default function TeamHittersTable({ selectedTeam, lineup, setLineup }) {
     findHittersByMLBTeamAndSeason({ AbbName: selectedTeam.id, aseason: 2023 });
   }, [findHittersByMLBTeamAndSeason, selectedTeam]);
 
+  useEffect(() => {
+    console.log('in useEffect', teams);
+    if (teams) {
+      setAvailableHitters(teams);
+    }
+  }, [teams, setAvailableHitters]);
+
   if (teamsLoading) return <div>Loading...</div>;
   if (teamsError) return <div>Error: {teamsError.message}</div>;
   return (
     <>
-      <Table data={teams} columns={[...columns, addPlayerButton]} />
+      <Table data={availableHitters} columns={[...columns, addPlayerButton]} />
     </>
   );
 }

@@ -8,10 +8,6 @@ export const getBoxScoreHitterColumns = () => {
       header: 'Name',
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor('team', {
-      header: 'Team',
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor('plateAppearances', {
       header: 'PA',
       cell: (info) => info.renderValue(),
@@ -62,10 +58,6 @@ export const getBoxScorePitcherColumns = () => {
   const columns = [
     columnHelper.accessor('name', {
       header: 'Name',
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('team', {
-      header: 'Team',
       cell: (info) => info.getValue(),
     }),
     // columnHelper.accessor('wins', {
@@ -129,13 +121,11 @@ export const getDefaultHitterColumns = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor('first_name', {
-      header: 'First Name',
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('last_name', {
-      header: 'Last Name',
-      cell: (info) => <i>{info.getValue()}</i>,
+    columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
+      id: 'name', // It's important to provide an id for custom accessors
+      header: () => 'Name',
+      cell: (info) => <span>{info.getValue()}</span>,
+      sticky: 'left', // Apply sticky if needed
     }),
     columnHelper.accessor('G', {
       header: 'G',
@@ -241,13 +231,11 @@ export const getDefaultPitcherColumns = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor('first_name', {
-      header: 'First Name',
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('last_name', {
-      header: 'Last Name',
-      cell: (info) => <i>{info.getValue()}</i>,
+    columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
+      id: 'name', // It's important to provide an id for custom accessors
+      header: () => 'Name',
+      cell: (info) => <span>{info.getValue()}</span>,
+      sticky: 'left', // Apply sticky if needed
     }),
     columnHelper.accessor('W', {
       header: 'W',
