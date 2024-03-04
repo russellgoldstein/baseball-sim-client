@@ -74,7 +74,7 @@ const processDataForBoscore = (hitterData, pitcherData, team) => {
   const pitcher = {
     name: pitcherData.player.name,
     team: team,
-    IP: pitcherData.plateAppearances / 3, // Assuming plate appearances can be directly converted to innings pitched, adjust based on actual logic
+    IP: pitcherData.outs / 3, // Assuming plate appearances can be directly converted to innings pitched, adjust based on actual logic
     H: pitcherData.hits,
     R: pitcherData.runs,
     ER: pitcherData.runs, // Assuming runs are equivalent to earned runs, adjust if necessary

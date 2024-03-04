@@ -1,28 +1,49 @@
-import { createColumnHelper } from '@tanstack/react-table';
 import Table from './Table';
 
 export const Linescore = ({ homeLinescore, awayLinescore }) => {
-  console.log({ homeLinescore, awayLinescore });
-  const columnHelper = createColumnHelper();
-  const columns = [
-    columnHelper.accessor('inning', {
-      header: 'Inning',
-      cell: (info) => info.renderValue(),
-    }),
-    columnHelper.accessor('away', {
-      header: 'Away',
-      cell: (info) => info.renderValue(),
-    }),
-    columnHelper.accessor('home', {
-      header: 'Home',
-      cell: (info) => info.renderValue(),
-    }),
+  const awayTeamTotals = awayLinescore.reduce((acc, score) => acc + score, 0);
+  const homeTeamTotals = homeLinescore.reduce((acc, score) => acc + score, 0);
+
+  const data = [
+    {
+      category: 'Away',
+      ...Object.fromEntries(awayLinescore.map((score, i) => [`inning${i + 1}`, score])),
+      teamTotalRuns: awayTeamTotals,
+    },
+    {
+      category: 'Home',
+      ...Object.fromEntries(homeLinescore.map((score, i) => [`inning${i + 1}`, score])),
+      teamTotalRuns: homeTeamTotals,
+    },
   ];
 
-  const data = homeLinescore.map((inning, index) => ({
-    inning: index + 1,
-    home: homeLinescore[index],
-    away: awayLinescore[index],
-  }));
-  return <Table data={data} columns={columns} />;
+  // Dynamically generate columns based on the number of innings
+  const inningColumns = [
+    {
+      accessorKey: `category`, // Unique ID for each inning
+      header: () => 'INNING',
+      cell: (info) => info.getValue(),
+    },
+    ...awayLinescore.map((_, index) => ({
+      accessorKey: `inning${index + 1}`, // Unique ID for each inning
+      header: () => index + 1,
+      cell: (info) => info.getValue(),
+    })),
+    {
+      accessorKey: `teamTotalRuns`, // Unique ID for each inning
+      header: () => 'TOTAL',
+      cell: (info) => <b>{info.getValue()}</b>,
+    },
+  ];
+
+  // Add the initial column for the category label ("Inning", "Away", "Home")
+  const columns = [...inningColumns];
+
+  return (
+    <div className='flex flex-col md:flex-row gap-4'>
+      <div className='table-container w-full md:w-full'>
+        <Table data={data} columns={columns} />
+      </div>
+    </div>
+  );
 };
