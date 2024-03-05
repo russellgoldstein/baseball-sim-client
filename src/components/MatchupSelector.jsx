@@ -6,6 +6,7 @@ import SelectedTab from './SelectedTab';
 import Tabs from './Tabs';
 import { SimMatchup } from './SimMatchup';
 import { GameResults } from './GameResults';
+import { TeamLineupTable } from './TeamLineupTable';
 
 export default function MatchupSelector() {
   const [awayTeamHitters, setAwayTeamHitters] = useState([]);
@@ -66,48 +67,66 @@ export default function MatchupSelector() {
         />
       )}
       {playByPlay.length === 0 && (
-        <div className='flex flex-col md:flex-row'>
-          <div className='flex-container w-full'>
-            <Tabs>
-              {currentTab === 'home-team' && (
-                <>
-                  <UnselectedTab label='Away Team' href='#away-team' />
-                  <SelectedTab label='Home Team' href='#home-team' />{' '}
-                </>
-              )}
+        <>
+          <div className='flex flex-col md:flex-row'>
+            <TeamLineupTable
+              statType='default'
+              hittingLineup={awayTeamHitters}
+              setHittingLineup={setAwayTeamHitters}
+              pitchingLineup={awayTeamPitchers}
+              setPitchingLineup={setAwayTeamPitchers}
+            />
+            <TeamLineupTable
+              statType='default'
+              hittingLineup={homeTeamHitters}
+              setHittingLineup={setHomeTeamHitters}
+              pitchingLineup={homeTeamPitchers}
+              setPitchingLineup={setHomeTeamPitchers}
+            />
+          </div>
+          <div className='flex flex-col md:flex-row'>
+            <div className='flex-container w-full'>
+              <Tabs>
+                {currentTab === 'home-team' && (
+                  <>
+                    <UnselectedTab label='Away Team' href='#away-team' />
+                    <SelectedTab label='Home Team' href='#home-team' />{' '}
+                  </>
+                )}
+                {currentTab === 'away-team' && (
+                  <>
+                    <SelectedTab label='Away Team' href='#away-team' />
+                    <UnselectedTab label='Home Team' href='#home-team' />{' '}
+                  </>
+                )}
+              </Tabs>
               {currentTab === 'away-team' && (
                 <>
-                  <SelectedTab label='Away Team' href='#away-team' />
-                  <UnselectedTab label='Home Team' href='#home-team' />{' '}
+                  <TeamList
+                    hittingLineup={awayTeamHitters}
+                    setHittingLineup={setAwayTeamHitters}
+                    pitchingLineup={awayTeamPitchers}
+                    setPitchingLineup={setAwayTeamPitchers}
+                    selectedTeam={selectedAwayTeam}
+                    setSelectedTeam={setSelectedAwayTeam}
+                  />
                 </>
               )}
-            </Tabs>
-            {currentTab === 'away-team' && (
-              <>
-                <TeamList
-                  hittingLineup={awayTeamHitters}
-                  setHittingLineup={setAwayTeamHitters}
-                  pitchingLineup={awayTeamPitchers}
-                  setPitchingLineup={setAwayTeamPitchers}
-                  selectedTeam={selectedAwayTeam}
-                  setSelectedTeam={setSelectedAwayTeam}
-                />
-              </>
-            )}
-            {currentTab === 'home-team' && (
-              <>
-                <TeamList
-                  hittingLineup={homeTeamHitters}
-                  setHittingLineup={setHomeTeamHitters}
-                  pitchingLineup={homeTeamPitchers}
-                  setPitchingLineup={setHomeTeamPitchers}
-                  selectedTeam={selectedHomeTeam}
-                  setSelectedTeam={setSelectedHomeTeam}
-                />
-              </>
-            )}
+              {currentTab === 'home-team' && (
+                <>
+                  <TeamList
+                    hittingLineup={homeTeamHitters}
+                    setHittingLineup={setHomeTeamHitters}
+                    pitchingLineup={homeTeamPitchers}
+                    setPitchingLineup={setHomeTeamPitchers}
+                    selectedTeam={selectedHomeTeam}
+                    setSelectedTeam={setSelectedHomeTeam}
+                  />
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
