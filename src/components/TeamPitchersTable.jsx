@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { useFindPitchersByMLBTeamAndSeasonMutation } from '../services/myApi';
 import Table from './Table';
-import { getDefaultPitcherColumns } from '../utils/consts';
+import { getAdvancedPitcherColumns, getDefaultPitcherColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
 
-const columns = getDefaultPitcherColumns();
+const defaultColumns = getDefaultPitcherColumns();
+const advancedColumns = getAdvancedPitcherColumns();
 
 export default function TeamPitchersTable({
   selectedTeam,
-  lineup,
+  statType,
   setLineup,
   availablePitchers,
   setAvailablePitchers,
@@ -42,6 +43,7 @@ export default function TeamPitchersTable({
 
   if (teamsLoading) return <div>Loading...</div>;
   if (teamsError) return <div>Error: {teamsError.message}</div>;
+  const columns = statType === 'default' ? defaultColumns : advancedColumns;
   return (
     <>
       <Table data={availablePitchers} columns={[...columns, addPlayerButton]} />

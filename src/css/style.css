@@ -7,5 +7,6 @@
 @import 'additional-styles/utility-patterns.css';
 @import 'additional-styles/flatpickr.css';
 @import 'additional-styles/table.css';
+@import 'additional-styles/flex.css';
 
 @import 'tailwindcss/utilities';

@@ -2,15 +2,14 @@ import React, { useEffect } from 'react';
 import './index.css';
 import { useFindHittersByMLBTeamAndSeasonMutation } from '../services/myApi';
 import Table from './Table';
-import { getDefaultHitterColumns } from '../utils/consts';
+import { getAdvancedHitterColumns, getDefaultHitterColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
 
-const columns = getDefaultHitterColumns();
+const defaultColumns = getDefaultHitterColumns();
+const advancedColumns = getAdvancedHitterColumns();
 
-export default function TeamHittersTable({ selectedTeam, lineup, setLineup, availableHitters, setAvailableHitters }) {
-  console.log('in TeamHittersTable', selectedTeam, lineup, availableHitters, setAvailableHitters);
+export default function TeamHittersTable({ selectedTeam, statType, setLineup, availableHitters, setAvailableHitters }) {
   const addPlayerToLineup = (player) => {
-    console.log('in addPlayerToLineup', player);
     setLineup((currentLineup) => [...currentLineup, player]); // Use functional update
     setAvailableHitters((currentHitters) => currentHitters.filter((hitter) => hitter.id !== player.id));
   };
@@ -31,7 +30,6 @@ export default function TeamHittersTable({ selectedTeam, lineup, setLineup, avai
   }, [findHittersByMLBTeamAndSeason, selectedTeam]);
 
   useEffect(() => {
-    console.log('in useEffect', teams);
     if (teams) {
       setAvailableHitters(teams);
     }
@@ -39,6 +37,7 @@ export default function TeamHittersTable({ selectedTeam, lineup, setLineup, avai
 
   if (teamsLoading) return <div>Loading...</div>;
   if (teamsError) return <div>Error: {teamsError.message}</div>;
+  const columns = statType === 'default' ? defaultColumns : advancedColumns;
   return (
     <>
       <Table data={availableHitters} columns={[...columns, addPlayerButton]} />

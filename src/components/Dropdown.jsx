@@ -49,7 +49,7 @@ export default function Dropdown({ options, selected, setSelected }) {
       <Transition
         show={dropdownOpen}
         tag='div'
-        className='z-10 absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1'
+        className='z-50 absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1'
         enter='transition ease-out duration-100 transform'
         enterStart='opacity-0 -translate-y-2'
         enterEnd='opacity-100 translate-y-0'

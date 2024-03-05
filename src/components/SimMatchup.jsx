@@ -1,18 +1,19 @@
-import { useState } from 'react';
 import { usePlayGameMutation } from '../services/myApi';
-import { GameBoxScore } from './GameBoxScore';
-import { Linescore } from './Linescore';
 
-export const SimMatchup = ({ awayTeamHitters, awayTeamPitchers, homeTeamHitters, homeTeamPitchers }) => {
-  const [homeBoxScore, setHomeBoxScore] = useState([]);
-  const [awayBoxScore, setAwayBoxScore] = useState([]);
-  const [homeLinescore, setHomeLinescore] = useState([]);
-  const [awayLinescore, setAwayLinescore] = useState([]);
-
+export const SimMatchup = ({
+  awayTeamHitters,
+  awayTeamPitchers,
+  homeTeamHitters,
+  homeTeamPitchers,
+  setPlayByPlay,
+  setHomeLinescore,
+  setAwayBoxScore,
+  setHomeBoxScore,
+  setAwayLinescore,
+}) => {
   const [playGame, { error: playGameError, isLoading: playGameLoading }] = usePlayGameMutation();
 
   const submitMatchup = async () => {
-    console.log('Submit Matchup');
     const result = await playGame({
       awayTeamHitters,
       awayTeamPitchers,
@@ -21,40 +22,28 @@ export const SimMatchup = ({ awayTeamHitters, awayTeamPitchers, homeTeamHitters,
     });
     const { homeHitters, homePitcher, awayHitters, awayPitcher } = result.data.boxscore;
     const { home: homeLinescore, away: awayLinescore } = result.data.linescore;
+    const plays = result.data.playByPlay;
+    setPlayByPlay(plays);
     setHomeLinescore(homeLinescore);
     setAwayLinescore(awayLinescore);
-    const homeBoxScore = processDataForBoscore(homeHitters, homePitcher, 'home');
-    const awayBoxScore = processDataForBoscore(awayHitters, awayPitcher, 'away');
-    console.log(homeBoxScore);
-    console.log(awayBoxScore);
+    const homeBoxScore = processDataForBoxscore(homeHitters, homePitcher, 'home');
+    const awayBoxScore = processDataForBoxscore(awayHitters, awayPitcher, 'away');
     setHomeBoxScore(homeBoxScore);
     setAwayBoxScore(awayBoxScore);
   };
 
-  console.log('in SimMatchup', { homeBoxScore, awayBoxScore });
   return (
     <>
       <button onClick={submitMatchup}>Submit Matchup</button>
       {playGameLoading && <div>Simulating Game...</div>}
       {playGameError && <div>Error Simulation: {playGameError.message}</div>}
-      <div>
-        {homeBoxScore.hitters &&
-          homeBoxScore.hitters.length > 0 &&
-          awayBoxScore.pitchers &&
-          awayBoxScore.pitchers.length > 0 && (
-            <>
-              <Linescore homeLinescore={homeLinescore} awayLinescore={awayLinescore} />
-              <GameBoxScore homeBoxScore={homeBoxScore} awayBoxScore={awayBoxScore} />
-            </>
-          )}
-      </div>
     </>
   );
 };
 
-const processDataForBoscore = (hitterData, pitcherData, team) => {
+const processDataForBoxscore = (hitterData, pitcherData, team) => {
   // Process hitters from both teams
-  const hitters = [...Object.values(hitterData)].map((hitter) => ({
+  const hitters = hitterData.map((hitter) => ({
     ...hitter,
     team: team,
     name: hitter.player.name,

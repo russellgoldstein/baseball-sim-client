@@ -28,11 +28,13 @@ export const Linescore = ({ homeLinescore, awayLinescore }) => {
       accessorKey: `inning${index + 1}`, // Unique ID for each inning
       header: () => index + 1,
       cell: (info) => info.getValue(),
+      align: 'right',
     })),
     {
       accessorKey: `teamTotalRuns`, // Unique ID for each inning
       header: () => 'TOTAL',
       cell: (info) => <b>{info.getValue()}</b>,
+      align: 'right',
     },
   ];
 

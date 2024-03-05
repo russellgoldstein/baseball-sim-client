@@ -1,12 +1,19 @@
 import React from 'react';
 import './index.css';
 import Table from './Table';
-import { getDefaultPitcherColumns } from '../utils/consts';
+import { getAdvancedPitcherColumns, getDefaultPitcherColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
 
-const columns = getDefaultPitcherColumns();
+const defaultColumns = getDefaultPitcherColumns();
+const advancedColumns = getAdvancedPitcherColumns();
 
-export default function TeamPitchersLineupTable({ lineup, setLineup, availablePitchers, setAvailablePitchers }) {
+export default function TeamPitchersLineupTable({
+  lineup,
+  setLineup,
+  availablePitchers,
+  setAvailablePitchers,
+  statType,
+}) {
   const removePlayerFromLineup = (player) => {
     setLineup(lineup.filter((pitcher) => pitcher.id !== player.id));
     setAvailablePitchers([...availablePitchers, player]);
@@ -45,6 +52,8 @@ export default function TeamPitchersLineupTable({ lineup, setLineup, availablePi
         <button onClick={() => movePlayerDown(row.original)}>Move Down</button>
       </>
     ),
+    sticky: 'right',
   });
+  const columns = statType === 'default' ? defaultColumns : advancedColumns;
   return <Table data={lineup} columns={[...columns, removePlayerButton]} />;
 }

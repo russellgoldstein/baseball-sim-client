@@ -1,7 +1,6 @@
 import BoxScoreTable from './BoxScoreTable';
 
 export const GameBoxScore = ({ homeBoxScore, awayBoxScore }) => {
-  console.log({ homeBoxScore, awayBoxScore });
   const { hitters: homeHitterBoxScore, pitchers: homePitcherBoxScore } = homeBoxScore;
   const { hitters: awayHitterBoxScore, pitchers: awayPitcherBoxScore } = awayBoxScore;
   return (

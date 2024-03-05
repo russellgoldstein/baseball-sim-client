@@ -1,13 +1,13 @@
 import React from 'react';
 import './index.css';
 import Table from './Table';
-import { getDefaultHitterColumns } from '../utils/consts';
+import { getAdvancedHitterColumns, getDefaultHitterColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
 
-const columns = getDefaultHitterColumns();
+const defaultColumns = getDefaultHitterColumns();
+const advancedColumns = getAdvancedHitterColumns();
 
-export default function TeamHittersLineupTable({ lineup, setLineup, availableHitters, setAvailableHitters }) {
-  console.log('in TeamHittersLineupTable', lineup, setLineup, availableHitters, setAvailableHitters);
+export default function TeamHittersLineupTable({ lineup, setLineup, availableHitters, setAvailableHitters, statType }) {
   const removePlayerFromLineup = (player) => {
     setLineup(lineup.filter((hitter) => hitter.id !== player.id));
     setAvailableHitters([...availableHitters, player]);
@@ -48,5 +48,6 @@ export default function TeamHittersLineupTable({ lineup, setLineup, availableHit
     ),
     sticky: 'right',
   });
+  const columns = statType === 'default' ? defaultColumns : advancedColumns;
   return <Table data={lineup} columns={[...columns, removePlayerButton]} />;
 }
