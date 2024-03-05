@@ -3,6 +3,9 @@ import './index.css';
 import Table from './Table';
 import { getAdvancedHitterColumns, getDefaultHitterColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
+import UserMinus from './icons/UserMinus';
+import ChevronUp from './icons/ChevronUp';
+import ChevronDown from './icons/ChevronDown';
 
 const defaultColumns = getDefaultHitterColumns();
 const advancedColumns = getAdvancedHitterColumns();
@@ -40,11 +43,11 @@ export default function TeamHittersLineupTable({ lineup, setLineup, availableHit
   const removePlayerButton = columnHelper.accessor('actions', {
     header: 'Actions',
     cell: ({ row }) => (
-      <>
-        <button onClick={() => removePlayerFromLineup(row.original)}>Remove Player</button>
-        <button onClick={() => movePlayerUp(row.original)}>Move Up</button>
-        <button onClick={() => movePlayerDown(row.original)}>Move Down</button>
-      </>
+      <div className='flex space-x-2 justify-center items-center'>
+        <ChevronUp onClick={() => movePlayerUp(row.original)} />
+        <ChevronDown onClick={() => movePlayerDown(row.original)} />
+        <UserMinus onClick={() => removePlayerFromLineup(row.original)} />
+      </div>
     ),
     sticky: 'right',
   });

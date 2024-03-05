@@ -4,6 +4,7 @@ import { useFindHittersByMLBTeamAndSeasonMutation } from '../services/myApi';
 import Table from './Table';
 import { getAdvancedHitterColumns, getDefaultHitterColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
+import UserPlus from './icons/UserPlus';
 
 const defaultColumns = getDefaultHitterColumns();
 const advancedColumns = getAdvancedHitterColumns();
@@ -18,7 +19,7 @@ export default function TeamHittersTable({ selectedTeam, statType, setLineup, av
 
   const addPlayerButton = columnHelper.accessor('addPlayer', {
     header: 'Actions',
-    cell: ({ row }) => <button onClick={() => addPlayerToLineup(row.original)}>Add Player</button>,
+    cell: ({ row }) => <UserPlus onClick={() => addPlayerToLineup(row.original)} />,
     sticky: 'right',
   });
 

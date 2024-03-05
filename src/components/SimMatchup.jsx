@@ -1,4 +1,6 @@
 import { usePlayGameMutation } from '../services/myApi';
+import { PrimaryButtonWithIcon } from './PrimaryButtonWithIcon';
+import { Baseball } from './icons/Baseball';
 
 export const SimMatchup = ({
   awayTeamHitters,
@@ -33,11 +35,16 @@ export const SimMatchup = ({
   };
 
   return (
-    <>
-      <button onClick={submitMatchup}>Submit Matchup</button>
-      {playGameLoading && <div>Simulating Game...</div>}
-      {playGameError && <div>Error Simulation: {playGameError.message}</div>}
-    </>
+    <div className='flex flex-container flex-col space-x-2 justify-center items-center'>
+      <PrimaryButtonWithIcon onClick={submitMatchup}>
+        <Baseball />
+        <span className='ml-2'> Play Ball!</span>
+      </PrimaryButtonWithIcon>
+      <div>
+        {playGameLoading && <div>Simulating Game...</div>}
+        {playGameError && <div>Error Simulation: {playGameError.message}</div>}
+      </div>
+    </div>
   );
 };
 

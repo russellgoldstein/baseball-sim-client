@@ -1,10 +1,17 @@
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import { useState } from 'react';
 
-export default function Table({ data, columns }) {
+export default function Table({ data, columns, initialSortBy }) {
+  const [sorting, setSorting] = useState([]);
   const table = useReactTable({
     data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -24,7 +31,20 @@ export default function Table({ data, columns }) {
                     right: header.column.columnDef.sticky === 'right' ? 0 : undefined,
                   }}
                 >
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  {header.isPlaceholder ? null : (
+                    <div
+                      {...{
+                        className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: ' 🔼',
+                        desc: ' 🔽',
+                      }[header.column.getIsSorted()] ?? null}
+                    </div>
+                  )}
                 </th>
               ))}
             </tr>

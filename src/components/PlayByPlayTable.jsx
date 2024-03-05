@@ -45,7 +45,6 @@ export const PlayByPlayTable = ({ plays }) => {
     }),
   ];
 
-  console.log(plays);
   return <Table data={plays} columns={columns} />;
 };
 

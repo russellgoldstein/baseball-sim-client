@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import { useFindPitchersByMLBTeamAndSeasonMutation } from '../services/myApi';
 import Table from './Table';
 import { getAdvancedPitcherColumns, getDefaultPitcherColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
+import UserPlus from './icons/UserPlus';
 
 const defaultColumns = getDefaultPitcherColumns();
 const advancedColumns = getAdvancedPitcherColumns();
@@ -24,7 +25,7 @@ export default function TeamPitchersTable({
 
   const addPlayerButton = columnHelper.accessor('addPlayer', {
     header: 'Actions',
-    cell: ({ row }) => <button onClick={() => addPlayerToLineup(row.original)}>Add Player</button>,
+    cell: ({ row }) => <UserPlus onClick={() => addPlayerToLineup(row.original)} />,
     sticky: 'right',
   });
 

@@ -152,13 +152,13 @@ export const getDefaultHitterColumns = () => {
       cell: (info) => info.renderValue(),
       align: 'right',
     }),
-    columnHelper.accessor('H', {
-      header: 'H',
+    columnHelper.accessor('R', {
+      header: 'R',
       cell: (info) => info.renderValue(),
       align: 'right',
     }),
-    columnHelper.accessor('R', {
-      header: 'R',
+    columnHelper.accessor('H', {
+      header: 'H',
       cell: (info) => info.renderValue(),
       align: 'right',
     }),

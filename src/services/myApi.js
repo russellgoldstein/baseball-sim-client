@@ -14,6 +14,13 @@ export const myApi = createApi({
       // This is where you could set headers common to all requests
       return headers;
     },
+    // Adding response handler
+    // responseHandler: async (response) => {
+    //   if (response.status === 401) {
+    //     window.location.href = '/login';
+    //   }
+    //   return response;
+    // },
   }),
   endpoints: (builder) => ({
     getFangraphsHitterSeasonStats: builder.query({

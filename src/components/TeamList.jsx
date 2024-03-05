@@ -21,13 +21,15 @@ export default function TeamList({
 
   return (
     <>
-      <TeamSelector selected={selectedTeam} setSelected={setSelectedTeam} />
-      <ToggleSwitch
-        isOn={statType === 'advanced'}
-        handleToggle={() => setStatType(statType === 'default' ? 'advanced' : 'default')}
-        leftText='Default'
-        rightText='Advanced'
-      />
+      <div className='flex flex-container flex-row space-x-2 justify-between items-center'>
+        <TeamSelector selected={selectedTeam} setSelected={setSelectedTeam} />
+        <ToggleSwitch
+          isOn={statType === 'advanced'}
+          handleToggle={() => setStatType(statType === 'default' ? 'advanced' : 'default')}
+          leftText='Default'
+          rightText='Advanced'
+        />
+      </div>
       {selectedTeam && (
         <>
           <div className='flex flex-col md:flex-row gap-4'>
