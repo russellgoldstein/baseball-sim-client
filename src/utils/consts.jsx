@@ -194,22 +194,22 @@ export const getDefaultHitterColumns = () => {
     }),
     columnHelper.accessor('AVG', {
       header: 'AVG',
-      cell: (info) => info.renderValue().toFixed(3).replace(/^0+/, ''),
+      cell: (info) => info.renderValue()?.toFixed(3).replace(/^0+/, ''),
       align: 'right',
     }),
     columnHelper.accessor('OBP', {
       header: 'OBP',
-      cell: (info) => info.renderValue().toFixed(3).replace(/^0+/, ''),
+      cell: (info) => info.renderValue()?.toFixed(3).replace(/^0+/, ''),
       align: 'right',
     }),
     columnHelper.accessor('SLG', {
       header: 'SLG',
-      cell: (info) => info.renderValue().toFixed(3).replace(/^0+/, ''),
+      cell: (info) => info.renderValue()?.toFixed(3).replace(/^0+/, ''),
       align: 'right',
     }),
     columnHelper.accessor('OPS', {
       header: 'OPS',
-      cell: (info) => info.renderValue().toFixed(3).replace(/^0+/, ''),
+      cell: (info) => info.renderValue()?.toFixed(3).replace(/^0+/, ''),
       align: 'right',
     }),
   ];
@@ -297,7 +297,7 @@ export const getDefaultPitcherColumns = () => {
     }),
     columnHelper.accessor('ERA', {
       header: 'ERA',
-      cell: (info) => info.renderValue().toFixed(2),
+      cell: (info) => info.renderValue()?.toFixed(2),
       align: 'right',
     }),
     columnHelper.accessor('G', {

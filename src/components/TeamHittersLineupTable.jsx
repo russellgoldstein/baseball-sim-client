@@ -11,6 +11,14 @@ const defaultColumns = getDefaultHitterColumns();
 const advancedColumns = getAdvancedHitterColumns();
 
 export default function TeamHittersLineupTable({ lineup, setLineup, availableHitters, setAvailableHitters, statType }) {
+  const generateEmptySpots = () => {
+    const emptySpots = [];
+    for (let i = lineup.length; i < 9; i++) {
+      emptySpots.push({ first_name: `-`, last_name: '', empty: true });
+    }
+    return emptySpots;
+  };
+
   const removePlayerFromLineup = (player) => {
     setLineup(lineup.filter((hitter) => hitter.id !== player.id));
     setAvailableHitters([...availableHitters, player]);
@@ -38,19 +46,22 @@ export default function TeamHittersLineupTable({ lineup, setLineup, availableHit
     }
   };
 
+  const completeLineup = [...lineup, ...generateEmptySpots()];
+
   const columnHelper = createColumnHelper();
 
   const removePlayerButton = columnHelper.accessor('actions', {
     header: 'Actions',
-    cell: ({ row }) => (
-      <div className='flex space-x-2 justify-center items-center'>
-        <ChevronUp onClick={() => movePlayerUp(row.original)} />
-        <ChevronDown onClick={() => movePlayerDown(row.original)} />
-        <UserMinus onClick={() => removePlayerFromLineup(row.original)} />
-      </div>
-    ),
+    cell: ({ row }) =>
+      !row.original.empty && (
+        <div className='flex space-x-2 justify-center items-center'>
+          <ChevronUp onClick={() => movePlayerUp(row.original)} />
+          <ChevronDown onClick={() => movePlayerDown(row.original)} />
+          <UserMinus onClick={() => removePlayerFromLineup(row.original)} />
+        </div>
+      ),
     sticky: 'right',
   });
   const columns = statType === 'default' ? defaultColumns : advancedColumns;
-  return <Table data={lineup} columns={[...columns, removePlayerButton]} />;
+  return <Table data={completeLineup} columns={[...columns, removePlayerButton]} />;
 }

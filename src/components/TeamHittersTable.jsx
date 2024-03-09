@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.css';
-import { useFindHittersByMLBTeamAndSeasonMutation } from '../services/myApi';
+import { useFindHittersByMLBTeamAndSeasonQuery } from '../services/myApi';
 import Table from './Table';
 import { getAdvancedHitterColumns, getDefaultHitterColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -23,13 +23,22 @@ export default function TeamHittersTable({ selectedTeam, statType, setLineup, av
     sticky: 'right',
   });
 
-  const [findHittersByMLBTeamAndSeason, { data: teams, error: teamsError, isLoading: teamsLoading }] =
-    useFindHittersByMLBTeamAndSeasonMutation();
+  // const [findHittersByMLBTeamAndSeason, { data: teams, error: teamsError, isLoading: teamsLoading }] =
+  //   useFindHittersByMLBTeamAndSeasonQuery();
 
-  useEffect(() => {
-    findHittersByMLBTeamAndSeason({ AbbName: selectedTeam.id, aseason: 2023 });
-  }, [findHittersByMLBTeamAndSeason, selectedTeam]);
+  const {
+    data: teams,
+    error: teamsError,
+    isLoading: teamsLoading,
+  } = useFindHittersByMLBTeamAndSeasonQuery({
+    AbbName: selectedTeam.id,
+    aseason: 2023,
+  });
 
+  const dataTeams = availableHitters.map((team) => ({
+    ...team.player,
+    ...team,
+  }));
   useEffect(() => {
     if (teams) {
       setAvailableHitters(teams);
@@ -39,9 +48,10 @@ export default function TeamHittersTable({ selectedTeam, statType, setLineup, av
   if (teamsLoading) return <div>Loading...</div>;
   if (teamsError) return <div>Error: {teamsError.message}</div>;
   const columns = statType === 'default' ? defaultColumns : advancedColumns;
+
   return (
     <>
-      <Table data={availableHitters} columns={[...columns, addPlayerButton]} />
+      <Table data={dataTeams} columns={[...columns, addPlayerButton]} />
     </>
   );
 }

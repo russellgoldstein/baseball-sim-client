@@ -1,19 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const getJwtToken = () => localStorage.getItem('feathers-jwt');
+console.log(import.meta.env);
 
 export const myApi = createApi({
   reducerPath: 'myApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3030/',
-    prepareHeaders: (headers) => {
-      const token = getJwtToken();
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-      // This is where you could set headers common to all requests
-      return headers;
-    },
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/api',
+    // prepareHeaders: (headers) => {
+    //   const token = getJwtToken();
+    //   if (token) {
+    //     headers.set('authorization', `Bearer ${token}`);
+    //   }
+    //   // This is where you could set headers common to all requests
+    //   return headers;
+    // },
     // Adding response handler
     // responseHandler: async (response) => {
     //   if (response.status === 401) {
@@ -27,34 +27,22 @@ export const myApi = createApi({
       query: () => `fangraphs-hitter-season-stats`,
     }),
     // Adding a mutation to call a custom method
-    findUniqueMLBTeams: builder.mutation({
+    findUniqueMLBTeams: builder.query({
       query: (body) => ({
-        url: `fangraphs-hitter-season-stats`, // Adjust the URL to your specific service
-        method: 'POST',
-        body,
-        headers: {
-          'X-Service-Method': 'findUniqueMLBTeams', // Custom header to specify the method
-        },
+        url: `fangraphs-hitter-season-stats/mlb-teams`, // Adjust the URL to your specific service
+        method: 'GET',
       }),
     }),
-    findHittersByMLBTeamAndSeason: builder.mutation({
+    findHittersByMLBTeamAndSeason: builder.query({
       query: (body) => ({
-        url: `fangraphs-hitter-season-stats`, // Adjust the URL to your specific service
-        method: 'POST',
-        body,
-        headers: {
-          'X-Service-Method': 'findHittersByMLBTeamAndSeason', // Custom header to specify the method
-        },
+        url: `fangraphs-hitter-season-stats?AbbName=${body.AbbName}&aseason=${body.aseason}`, // Adjust the URL to your specific service
+        method: 'GET',
       }),
     }),
-    findPitchersByMLBTeamAndSeason: builder.mutation({
+    findPitchersByMLBTeamAndSeason: builder.query({
       query: (body) => ({
-        url: `fangraphs-pitcher-season-stats`, // Adjust the URL to your specific service
-        method: 'POST',
-        body,
-        headers: {
-          'X-Service-Method': 'findPitchersByMLBTeamAndSeason', // Custom header to specify the method
-        },
+        url: `fangraphs-pitcher-season-stats?AbbName=${body.AbbName}&aseason=${body.aseason}`, // Adjust the URL to your specific service
+        method: 'GET',
       }),
     }),
     playGame: builder.mutation({
@@ -62,9 +50,6 @@ export const myApi = createApi({
         url: `play-game`, // Adjust the URL to your specific service
         method: 'POST',
         body,
-        headers: {
-          'X-Service-Method': 'playGame', // Custom header to specify the method
-        },
       }),
     }),
   }),
@@ -73,8 +58,8 @@ export const myApi = createApi({
 // Export hooks for your endpoints here
 export const {
   useGetFangraphsHitterSeasonStatsQuery,
-  useFindUniqueMLBTeamsMutation,
-  useFindHittersByMLBTeamAndSeasonMutation,
-  useFindPitchersByMLBTeamAndSeasonMutation,
+  useFindUniqueMLBTeamsQuery,
+  useFindPitchersByMLBTeamAndSeasonQuery,
   usePlayGameMutation,
+  useFindHittersByMLBTeamAndSeasonQuery,
 } = myApi;

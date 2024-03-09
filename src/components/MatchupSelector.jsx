@@ -68,7 +68,7 @@ export default function MatchupSelector() {
       )}
       {playByPlay.length === 0 && (
         <>
-          <div className='flex flex-col md:flex-row'>
+          <div className='flex flex-col md:flex-row justify-between'>
             <TeamLineupTable
               statType='default'
               hittingLineup={awayTeamHitters}

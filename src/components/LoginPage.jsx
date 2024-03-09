@@ -3,8 +3,7 @@ import React from 'react';
 
 export const LoginPage = () => {
   const handleLogin = () => {
-    // Redirect user to your FeathersJS OAuth URL
-    window.location.href = 'http://localhost:3030/oauth/google';
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth/google`;
   };
 
   return (

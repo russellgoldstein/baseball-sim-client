@@ -6,14 +6,16 @@ function AuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hashParams = new URLSearchParams(location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
+    // const hashParams = new URLSearchParams(location.hash.substring(1));
+    // const accessToken = hashParams.get('access_token');
 
-    if (accessToken) {
-      localStorage.setItem('feathers-jwt', accessToken);
+    // if (accessToken) {
+    //   localStorage.setItem('feathers-jwt', accessToken);
 
-      navigate('/');
-    }
+    //   navigate('/');
+    // }
+    // console.log(location);
+    navigate('/');
   }, [location, navigate]);
 
   return <div>Authentication successful! Redirecting...</div>;

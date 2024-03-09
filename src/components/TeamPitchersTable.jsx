@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.css';
-import { useFindPitchersByMLBTeamAndSeasonMutation } from '../services/myApi';
+import { useFindPitchersByMLBTeamAndSeasonQuery } from '../services/myApi';
 import Table from './Table';
 import { getAdvancedPitcherColumns, getDefaultPitcherColumns } from '../utils/consts';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -29,12 +29,19 @@ export default function TeamPitchersTable({
     sticky: 'right',
   });
 
-  const [findHPitchersByMLBTeamAndSeason, { data: teams, error: teamsError, isLoading: teamsLoading }] =
-    useFindPitchersByMLBTeamAndSeasonMutation();
+  const {
+    data: teams,
+    error: teamsError,
+    isLoading: teamsLoading,
+  } = useFindPitchersByMLBTeamAndSeasonQuery({
+    AbbName: selectedTeam.id,
+    aseason: 2023,
+  });
 
-  useEffect(() => {
-    findHPitchersByMLBTeamAndSeason({ AbbName: selectedTeam.id, aseason: 2023 });
-  }, [findHPitchersByMLBTeamAndSeason, selectedTeam]);
+  const dataTeams = availablePitchers.map((team) => ({
+    ...team.player,
+    ...team,
+  }));
 
   useEffect(() => {
     if (teams) {
@@ -47,7 +54,7 @@ export default function TeamPitchersTable({
   const columns = statType === 'default' ? defaultColumns : advancedColumns;
   return (
     <>
-      <Table data={availablePitchers} columns={[...columns, addPlayerButton]} />
+      <Table data={dataTeams} columns={[...columns, addPlayerButton]} />
     </>
   );
 }
