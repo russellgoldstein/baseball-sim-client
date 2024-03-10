@@ -14,6 +14,7 @@ export const TeamLineupTable = ({
 }) => {
   return (
     <div className='flex flex-container flex-col justify-start items-stretch space-y-6'>
+      test
       <TeamHittersLineupTable
         lineup={hittingLineup}
         setLineup={setHittingLineup}
